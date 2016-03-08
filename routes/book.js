@@ -5,7 +5,9 @@ var goodGuy = require('good-guy-http')({
 var jp = require('jsonpath');
 var router = new express.Router();
 var ESI = require('nodesi');
-var esi = new ESI();
+var esi = new ESI({
+    onError: (src, error) => `<!-- GET ${src} resulted in ${error} -->`
+});
 
 var BOOK_SERVICE_URL = 'https://book-catalog-proxy-5.herokuapp.com/book?isbn=';
 
@@ -28,12 +30,16 @@ function renderPage (app, pageData) {
     });
 }
 
+function partial (fn, args) {
+    return fn.bind(null, args);
+}
+
 router.get('/:isbn', function (req, res, next) {
     goodGuy(`${BOOK_SERVICE_URL}${req.params.isbn}`)
     .then(response => JSON.parse(response.body))
     .then(pickRelevantBookData)
-    .then(renderPage.bind(null, req.app))
-    .then(html =>  esi.process(html))
+    .then(partial(renderPage, req.app))
+    .then(html => esi.process(html))
     .then(html => res.send(html))
     .catch(next);
 });
