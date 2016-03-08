@@ -1,18 +1,14 @@
 var express = require('express');
-var request = require('request');
+var goodGuy = require('good-guy-http')({
+    maxRetries: 3
+});
 var router = express.Router();
 
-var BOOK_SERVICE_URL = 'https://book-catalog-proxy-3.herokuapp.com/book?isbn=';
+var BOOK_SERVICE_URL = 'https://book-catalog-proxy-5.herokuapp.com/book?isbn=';
 
-/* GET users listing. */
 router.get('/:isbn', function(req, res, next) {
-    request(`${BOOK_SERVICE_URL}${req.params.isbn}`, (err, response, body) => {
-        if (err) {
-            next(err);
-            return;
-        }
-
-        var data = JSON.parse(body);
+    goodGuy(`${BOOK_SERVICE_URL}${req.params.isbn}`).then(response => {
+        var data = JSON.parse(response.body);
         const volume = data.items[0].volumeInfo
         var pageData = {
             bookTitle: volume.title,
@@ -21,7 +17,7 @@ router.get('/:isbn', function(req, res, next) {
         };
 
         res.render('book', pageData);
-    });
+    }).catch(next);
 });
 
 module.exports = router;
