@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "debug": "DEBUG=book-bff:* nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "lint": "finn-js-code-style bin routes"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -13,11 +14,13 @@
     "express": "~4.13.1",
     "good-guy-http": "^1.7.0",
     "hjs": "~0.0.6",
+    "jsonpath": "^0.2.2",
     "morgan": "~1.6.1",
     "request": "^2.69.0",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "finn-js-code-style": "^6.0.0-alpha.1",
     "nodemon": "^1.9.1"
   }
 }

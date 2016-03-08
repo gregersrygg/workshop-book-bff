@@ -1,0 +1,9 @@
+{
+    "extends": [
+        "finn",
+        "finn/node"
+    ],
+    "env": {
+        "node": true
+    }
+}
