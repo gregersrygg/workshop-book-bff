@@ -10,6 +10,15 @@ var book = require('./routes/book');
 
 var app = express();
 
+app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const end = Date.now();
+        console.log(`Response took ${end - start}ms`);
+    });
+    next();
+});
+
 //app.use(esiMiddleware());
 
 // view engine setup
