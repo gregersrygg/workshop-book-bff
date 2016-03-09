@@ -10,7 +10,7 @@ var esi = new ESI({
 });
 
 var BOOK_SERVICE_URL = 'https://book-catalog-proxy-5.herokuapp.com/book?isbn=';
-var BOOK_COUNT_URL = 'http://book-service-gregers.herokuapp.com/stock';
+var BOOK_COUNT_URL = process.env.BOOK_COUNT_URL || 'http://book-service-gregers.herokuapp.com/stock';
 
 function pickRelevantBookData (isbn, data) {
     const volume = jp.value(data, '$..volumeInfo');
