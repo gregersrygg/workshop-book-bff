@@ -38,11 +38,12 @@ function partial (fn, args) {
 
 router.get('/:isbn', function (req, res, next) {
     const isbn = req.params.isbn;
+    const requestId = req.headers['x-request-id'];
     goodGuy(`${BOOK_SERVICE_URL}${isbn}`)
     .then(response => JSON.parse(response.body))
     .then(partial(pickRelevantBookData, isbn))
     .then(partial(renderPage, req.app))
-    .then(html => esi.process(html, { headers: { Accept: 'text/html' } }))
+    .then(html => esi.process(html, { headers: { 'Accept': 'text/html', 'x-request-id': requestId } }))
     .then(html => res.send(html))
     .catch(next);
 });
